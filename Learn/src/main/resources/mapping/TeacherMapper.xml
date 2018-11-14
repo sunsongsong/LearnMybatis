@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TeacherMapper">
+
+  <resultMap id="teacherVo" type="com.example.demo.model.vo.TeacherAndStudentsVo">
+    <id property="id" column="id"/>
+    <result property="teacherName" column="teacherName"/>
+
+    <collection property="students" column="sid" ofType="com.example.demo.model.bean.Student">
+      <id property="id" column="sid"/>
+      <result property="teacherId" column="teacherId"/>
+      <result property="studentName" column="studentName"/>
+    </collection>
+  </resultMap>
+
+  <select id="getTeachers" parameterType="string" resultType="com.example.demo.model.bean.Teacher">
+    SELECT * FROM teacher
+  </select>
+
+  <select id="getTeacherAndStudents" parameterType="string" resultMap="teacherVo">
+    SELECT
+        t.id as id,
+        t.teacherName,
+        s.id as sid,
+        s.teacherId,
+        s.studentName
+    FROM
+        teacher t
+    INNER JOIN student s ON t.id = s.teacherId
+  </select>
+
+</mapper>
